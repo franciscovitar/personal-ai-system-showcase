@@ -39,11 +39,11 @@ Las flechas muestran **responsabilidades y fronteras de confianza**, no procesos
 | Captura conversacional | `src/reference/capture-runtime.mjs` | No inferir campos; propuesta validada | Interpretación LLM real, conectores canónicos |
 | Aprendizaje adaptativo y examen | `src/reference/study-runtime.mjs` | Blueprint, facetas, un ítem a la vez, sin readiness ficticia | Learning runtime integral, FSRS, material oficial |
 | Continuidad multiproyecto | `src/reference/project-ledger.mjs` | CAS, owner isolation, recibo e idempotencia en memoria | Registro durable, autenticación y reconciliación remota |
-| Trabajo profesional / Genova | `src/reference/professional-delivery.mjs` | 12 servicios, 7 intervenciones, 35 familias de diseño; gates | Investigación actual, bibliotecas implementadas, V1/V2 y producción |
+| Trabajo profesional / Genova | `src/reference/professional-delivery.mjs` | 12 servicios, 7 intervenciones, 35 familias de investigación/selección; gates | Investigación por encargo, bibliotecas implementadas, ejecución y validación real |
 | Mejora continua del sistema | `src/reference/improvement-runtime.mjs` | Baseline, riesgo, evidencia, regresiones y adopción separada | Métricas de operación, revisión mantenida, cambios reales |
 | QA / evaluaciones | `test/`, `.github/workflows/ci.yml` | Tests reproducibles de caminos felices y negativos | Evaluaciones de producción, incidentes, SLAs |
 
-**Tres estados que no se mezclan:** `DOCUMENTADO` ≠ `REFERENCIA_EJECUTABLE` ≠ `OPERACIONAL_REAL`. Un test verde en este repositorio demuestra un comportamiento de *esta referencia*, nunca un conector de PAS privado ni una implementación V2 que todavía esté en diseño.
+**Tres estados que no se mezclan:** `DOCUMENTADO` ≠ `REFERENCIA_EJECUTABLE` ≠ `OPERACIONAL_REAL`. Un test verde en este repositorio demuestra un comportamiento de *esta referencia*, nunca un conector de PAS privado, la certificación integral de Genova V1 ni las automatizaciones de V2.
 
 ## 3. Skills: alcance completo del inventario arquitectónico
 
@@ -95,8 +95,9 @@ En el código público, la ruta llega a **candidatos remotos con `fetched: false
 
 - **12 servicios:** web, software, rediseño, modernización, ecommerce, automatización, IA, integraciones, SEO, Google Ads, mantenimiento y analítica; identificadores en `SERVICES`.
 - **7 intervenciones:** `CREATE`, `REDESIGN`, `AUDIT`, `IMPROVE`, `MIGRATE`, `REPAIR`, `MAINTAIN`. Se eligen independientemente del servicio.
-- **35 familias L01–L35:** diseño/UX, motion, ingeniería, marketing/medición y metodología/QA. Son un **catálogo de diseño para investigar, seleccionar e implementar según necesidad**, no 35 paquetes instalados o evaluados en producción.
-- **V1:** coordinación conversacional y entregables con fuentes verificadas y permisos; **V2:** ambición/arquitectura de entrega más extensa. Este showcase no declara que V2 esté implementada.
+- **35 familias L01–L35:** diseño/UX, motion, ingeniería, marketing/medición y metodología/QA. Están **habilitadas bajo demanda para investigar y seleccionar en V1**, no son 35 paquetes instalados ni 35 implementaciones certificadas.
+- **V1 (alcance objetivo):** metodología profesional completa sobre 12 servicios, 7 intervenciones y 35 familias: discovery, Research First, entregables, QA con evidencia, handoff y continuidad multiproyecto; ChatGPT IA coordina, y Codex/Drive/GitHub intervienen solo con la autoridad correspondiente. **No se declara V1 íntegramente certificada ni validada en campo.**
+- **V2 (meta técnica posterior):** MCP/OAuth, conectores, orquestación hospedada, persistencia automática y observabilidad. No significa que las 35 familias profesionales deban esperar hasta V2. Algunos archivos del PAS original conservan el sufijo histórico `_V2`, pero su contenido metodológico participa del alcance V1.
 
 `designDeliveryPlan()` exige un recibo de fuente marcado como verificado y siempre devuelve `executionAuthority: NONE`. El caller no gana permisos por pasar un booleano de aprobación; el ejemplo no tiene ejecutor real.
 
