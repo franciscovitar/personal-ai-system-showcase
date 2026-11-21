@@ -1,0 +1,15 @@
+{
+  "name": "personal-ai-system-showcase",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Public, synthetic reference implementation of the Personal AI System control-tower architecture",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test",
+    "example": "node examples/run.mjs",
+    "check": "node --check src/control-tower.mjs && node --check src/catalog.mjs && node --check src/context-compiler.mjs && node --check src/source-registry.mjs && node --check src/synthetic-store.mjs && node --check examples/run.mjs"
+  }
+}
