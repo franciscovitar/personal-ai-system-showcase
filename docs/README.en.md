@@ -2,7 +2,7 @@
 
 **An AI control tower designed to preserve context, source authority and human control across long-running work.**
 
-[Español](../README.md) · [Architecture](architecture.md) · [Engineering decisions](engineering-decisions.md) · [Security & scope](security-and-scope.md) · [Recruiter review guide](recruiter-tour.md)
+[Portfolio case study](https://franvitar.genovasite.com/work/personal-ai-system) · [Español](../README.md) · [Architecture](architecture.md) · [Engineering decisions](engineering-decisions.md) · [Security & scope](security-and-scope.md) · [Recruiter review guide](recruiter-tour.md)
 
 > This is a **separate, synthetic reference implementation** of selected Personal AI System architectural ideas. It is **not** a copy of the private system, a deployed service, an LLM model, or a live connector. Its code and tests are intentionally open for technical review.
 
