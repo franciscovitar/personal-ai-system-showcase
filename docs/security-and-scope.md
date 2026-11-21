@@ -17,7 +17,7 @@ This repository was authored independently as a **synthetic reference**, not clo
 | Stale or weak claim | Risk-based promotion eligibility and remote candidate flags | No online verification or independently reviewed source corpus in showcase |
 | Concurrency | Optimistic revision checks and per-process idempotency | No transactional durability across servers or process crashes |
 | Skill/plugin privilege | Capability registry is descriptive; no tool invocation | Host runtime installation, tool credentials and permission grants are external |
-| Professional planning | `DESIGN_PLAN_ONLY` and `executionAuthority: NONE` | Neither V2 delivery libraries nor production execution are provided |
+| Professional planning | `DESIGN_PLAN_ONLY` and `executionAuthority: NONE` | V1 methodology is represented by a synthetic catalog, not live Genova delivery or customer execution; V2 hosted automation is absent |
 
 **Important:** Anyone can construct a synthetic scenario on their own machine. An `approved: true` flag here is only a **testing seam**, never evidence of authorization for real accounts or APIs. Node process exit discards every record. No third-party service receives data.
 

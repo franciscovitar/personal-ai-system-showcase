@@ -80,6 +80,6 @@
 
 **Problema:** confundir 12 servicios, 7 intervenciones y 35 familias diseñadas con 35 herramientas listas para usar es engañoso.
 
-**Decisión:** versionar el catálogo de *capacidades posibles*; verificar metodología vigente y Research First antes de definir trabajo, y no activar un ejecutor desde una planificación. V1 conversacional y V2 diseñada conservan estados separados.
+**Decisión:** versionar el catálogo de *capacidades posibles*; verificar metodología vigente y Research First antes de definir trabajo, y no activar un ejecutor desde una planificación. Genova **V1** abarca el método profesional completo (12 servicios, 7 intervenciones y 35 familias bajo demanda), sin afirmar que todas las bibliotecas estén implementadas o que la V1 esté certificada en campo. **V2** corresponde a la automatización técnica posterior (MCP/OAuth, ejecución hospedada y persistencia automática).
 
 **Trade-off:** una demo estática no impresiona por efectos superficiales; sí permite demostrar taxonomía, criterio y los checks necesarios para un proyecto serio.

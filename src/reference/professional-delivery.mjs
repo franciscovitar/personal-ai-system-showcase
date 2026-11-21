@@ -1,7 +1,9 @@
 /**
  * Public method catalog. 12 service families, 7 intervention overlays and 35
  * designed library families are distinct dimensions, not 35 installed tools.
- * V1 conversational orchestration and V2 design scope must not be conflated.
+ * V1 covers professional methodology across all three dimensions, on demand;
+ * V2 concerns later technical automation/connectors. This public sample only
+ * designs a plan: neither version grants live execution authority here.
  */
 export const SERVICES = Object.freeze([
   "web-new", "software-new", "web-redesign", "software-modernization",
