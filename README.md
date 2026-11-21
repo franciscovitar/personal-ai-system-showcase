@@ -2,7 +2,7 @@
 
 **Una torre de control para trabajar con inteligencia artificial sin perder contexto, fuentes ni control.**
 
-[English version](docs/README.en.md) · [Arquitectura](docs/architecture.md) · [Decisiones de ingeniería](docs/engineering-decisions.md) · [Seguridad y alcance](docs/security-and-scope.md) · [Guía para recruiters](docs/recruiter-tour.md)
+[Caso de estudio en el portfolio](https://franvitar.genovasite.com/work/personal-ai-system?lang=es) · [English version](docs/README.en.md) · [Arquitectura](docs/architecture.md) · [Decisiones de ingeniería](docs/engineering-decisions.md) · [Seguridad y alcance](docs/security-and-scope.md) · [Guía para recruiters](docs/recruiter-tour.md)
 
 ![CI](https://github.com/franciscovitar/personal-ai-system-showcase/actions/workflows/ci.yml/badge.svg)
 
