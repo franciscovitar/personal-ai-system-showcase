@@ -2,9 +2,11 @@
 
 **An AI control tower designed to preserve context, source authority and human control across long-running work.**
 
-[Portfolio case study](https://franvitar.genovasite.com/work/personal-ai-system) · [Español](../README.md) · [Architecture](architecture.md) · [Engineering decisions](engineering-decisions.md) · [Security & scope](security-and-scope.md) · [Recruiter review guide](recruiter-tour.md)
+[Portfolio case study](https://franvitar.genovasite.com/work/personal-ai-system) · [Español](../README.md) · [Full system map](system-map.md) · [Architecture](architecture.md) · [End-to-end workflows](workflows.md) · [Engineering decisions](engineering-decisions.md) · [Security & scope](security-and-scope.md) · [Recruiter review guide](recruiter-tour.md)
 
-> This is a **separate, synthetic reference implementation** of selected Personal AI System architectural ideas. It is **not** a copy of the private system, a deployed service, an LLM model, or a live connector. Its code and tests are intentionally open for technical review.
+> This is a **separate, synthetic reference implementation** of Personal AI System architectural ideas. It is **not** a copy of the private system, a deployed service, an LLM model, or a live connector. Its code and tests are intentionally open for technical review.
+
+**Engineering depth matters.** Beyond the original six sample routes, this repository now demonstrates contracts for **14 specialized Skills**, scoped knowledge and source governance, policy/permission gates, claim-level evidence, learning and capture runtimes, optimistic concurrency for project continuity, controlled improvement, and a professional delivery taxonomy of **12 services, 7 intervention types and 35 designed library families**. These are distinct architectural dimensions—not a claim that 14 autonomous agents or 35 production libraries are deployed.
 
 ## The challenge
 
@@ -36,7 +38,7 @@ In the **private PAS**, GitHub holds curated knowledge, skills and governance; D
 | Professional delivery | `professional` | Task-specific method and acceptance steps |
 | Projects | `projects` | Project continuity from an explicit source |
 
-These are **representative flows**, not complete products or faithful exports of private modules.
+These are **representative flows**, not complete products or faithful exports of private modules. The [technical system map](system-map.md) also documents the wider domain inventory and a candid implemented/reference/documented coverage matrix.
 
 ## Review the actual code
 
@@ -46,6 +48,13 @@ These are **representative flows**, not complete products or faithful exports of
 - [`src/control-tower.mjs`](../src/control-tower.mjs): the boundary between a plan, a write proposal and an authorized synthetic write.
 - [`src/synthetic-store.mjs`](../src/synthetic-store.mjs): idempotency and readback in memory.
 - [`test/control-tower.test.mjs`](../test/control-tower.test.mjs): failure paths, misuse and safe retries.
+- [`src/reference/skill-registry.mjs`](../src/reference/skill-registry.mjs): fourteen capability contracts.
+- [`src/reference/knowledge-runtime.mjs`](../src/reference/knowledge-runtime.mjs): candidate packs, scoped retrieval, provenance and unexecuted remote source candidates.
+- [`src/reference/policy-engine.mjs`](../src/reference/policy-engine.mjs) and [`evidence-runtime.mjs`](../src/reference/evidence-runtime.mjs): trust, permissions, risk and verifiable evidence states.
+- [`src/reference/study-runtime.mjs`](../src/reference/study-runtime.mjs) and [`capture-runtime.mjs`](../src/reference/capture-runtime.mjs): learning evidence and conservative capture.
+- [`src/reference/project-ledger.mjs`](../src/reference/project-ledger.mjs): project owner isolation, CAS, replay protection and readback.
+- [`src/reference/professional-delivery.mjs`](../src/reference/professional-delivery.mjs) and [`improvement-runtime.mjs`](../src/reference/improvement-runtime.mjs): service/overlay catalog and evidence-gated improvements.
+- [`src/reference/orchestrator.mjs`](../src/reference/orchestrator.mjs) and [`test/reference-runtime.test.mjs`](../test/reference-runtime.test.mjs): composed traces and negative tests.
 
 Run with Node.js 20+ (no credentials or dependencies):
 
@@ -53,8 +62,9 @@ Run with Node.js 20+ (no credentials or dependencies):
 npm run check
 npm test
 npm run example
+npm run tour
 ```
 
-The example has **no web UI**. Code and automated tests are the public evidence, while the actual PAS remains private. The [security document](security-and-scope.md) distinguishes simulated guards from real authentication, integrations and production operation.
+The reference has **no web UI**. Code and automated tests are the public evidence, while the actual PAS remains private. See the [verification matrix](verification.md), [real-world-inspired scenarios](workflows.md) and [security boundary](security-and-scope.md). Simulated guards are explicitly distinct from real authentication, integrations and production operation.
 
 **Francisco Vitar** · Systems Engineering · Applied AI and software architecture.

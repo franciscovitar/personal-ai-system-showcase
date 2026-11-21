@@ -2,6 +2,8 @@
 
 > Model conceptual público, no diagrama de despliegue del PAS privado.
 
+**Para la arquitectura completa:** [mapa de capas, Skills, dominios y alcance](system-map.md). Este diagrama es la ruta de control más pequeña; el mapa técnico muestra las capas de seguridad, aprendizaje, contexto, mejora y delivery que se sumaron después.
+
 ```mermaid
 flowchart TD
     A["Conversación o pedido"] --> B["Control tower"]
@@ -22,11 +24,13 @@ flowchart TD
 ## Límites de responsabilidad
 
 1. **Interfaz.** En el sistema personal, una conversación puede iniciar el pedido. Este repositorio comienza con una cadena de texto, sin ChatGPT API ni credenciales.
-2. **Control.** `routeIntent()` identifica uno de seis métodos de ejemplo. No pretende replicar el enrutamiento avanzado ni los perfiles privados.
-3. **Conocimiento.** `resolveSources()` retorna únicamente fuentes necesarias, con roles y versiones ficticios. No hay búsqueda en un repositorio privado.
+2. **Control.** `routeIntent()` identifica uno de seis métodos iniciales; `orchestrateReferenceRequest()` ahora incorpora contratos de Skills, contexto, permisos y evidencia. No replica el ruteo avanzado privado.
+3. **Conocimiento.** `resolveSources()` retorna roles y versiones ficticios; `compileKnowledgePacket()` selecciona packs sintéticos por ámbito y señala candidatos remotos no descargados. No hay búsqueda en un repositorio privado.
 4. **Ejecución.** `plan()` no ejecuta escrituras. Incluso `training` y `nutrition` terminan como `PROPOSE_ONLY`.
 5. **Autorización.** `applySyntheticWrite()` requiere un plan emitido por esa instancia, aprobación, clave de idempotencia y registro validado.
-6. **Evidencia.** La única operación mutante escribe en memoria y devuelve un recibo comprobado con lectura posterior.
+6. **Evidencia.** Las únicas operaciones mutantes (`SyntheticStore` y `ProjectLedger`) escriben en memoria, con recibo e inspección posterior; no sincronizan sistemas reales.
+7. **Dominio.** `StudyRuntime`, `prepareCapture()` y `designDeliveryPlan()` exhiben decisiones específicas sin inventar datos ni ejecutar producción.
+8. **Mejora.** `reviewImprovement()` analiza baseline/regresiones y nunca modifica el sistema automáticamente.
 
 ## Posibles escenarios y sus pruebas
 
