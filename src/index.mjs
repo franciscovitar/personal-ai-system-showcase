@@ -16,3 +16,8 @@ export { orchestrateReferenceRequest } from "./reference/orchestrator.mjs";
 
 export { ROUTES, compatibleRoute, selectFamilies } from "./reference/delivery-selection.mjs";
 export { planBlock, applyCheckpoint } from "./reference/execution-block.mjs";
+
+export { reviewResearch } from "./reference/research-review.mjs";
+export { compareToolRoutes } from "./reference/tool-comparison.mjs";
+export { makeCommercialCase, contactDraftEligibility, advanceCommercialCase, reviewEconomics } from "./reference/commercial-case.mjs";
+export { traceBrowserRequest } from "./reference/browser-trace.mjs";
