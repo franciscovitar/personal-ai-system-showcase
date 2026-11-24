@@ -46,3 +46,14 @@ export function applyCheckpoint({tasks,expectedRevision,revision,event,globalBlo
   if(checkpoint.status==="INVALID_PLAN")return reject("INVALID_EVIDENCE");
   return {status:"SYNTHETIC_CHECKPOINT",revision:revision+1,tasks:next,checkpoint,execute:false,synthetic:true};
 }
+
+export function reconcileTask({tasks,revision,expectedRevision,taskId,approved,evidence,globalBlock=false}={}){
+  const reject=status=>({status,execute:false,synthetic:true});
+  if(!Number.isSafeInteger(revision)||revision<1||revision>=Number.MAX_SAFE_INTEGER||expectedRevision!==revision)return reject("REVISION_CONFLICT");
+  const plan=planBlock({tasks,globalBlock});
+  if(plan.status==="GLOBAL_STOP"||plan.status==="INVALID_PLAN")return reject(plan.status);
+  if(approved!==true||typeof evidence!=="string"||!/^fixture:[a-z0-9][a-z0-9-]{0,79}$/.test(evidence))return reject("RECONCILIATION_REQUIRED");
+  if(!tasks.some(t=>t.id===taskId&&t.status==="BLOCKED"))return reject("NOT_TASK_LOCAL_BLOCK");
+  const next=tasks.map(t=>t.id===taskId?{...t,status:"PENDING",reconciliationEvidence:evidence,dependsOn:[...t.dependsOn]}:{...t,dependsOn:[...t.dependsOn]});
+  return {status:"SYNTHETIC_RECONCILED",revision:revision+1,tasks:next,checkpoint:planBlock({tasks:next}),execute:false,synthetic:true};
+}
