@@ -9,3 +9,8 @@ Scope: personal engineering portfolio; synthetic public reference only.
 - Added Node test declarations covering second-slice runtime, fixtures, study and static packaging. Native execution of the final checkpoint and actual browser/visual QA remain pending until observed.
 - Next: verify the branch CI for final head and run browser QA (both languages, mobile/desktop, keyboard, normal and negative paths), fix issues, then synchronize the broader public docs and portfolio case. Only then consider authorized static publication with verified zero incremental cost. Do not repeat the architecture decision or first slice.
 - No real external integrations, account changes, client/customer records, private PAS code export or paid infrastructure authorized or performed.
+
+## Third slice — browser verification and release preparation
+- Native CI at `d5033e8`: [run 45479412947](https://github.com/franciscovitar/personal-ai-system-showcase/actions/runs/45479412947) completed successfully, including syntax and all Node test declarations present at that commit. This supersedes the prior pending native-check note for that revision only.
+- Added a bounded real Chromium smoke test via the existing Node test command, using the runner's installed browser, a temporary loopback-only static server and CDP; no application dependency or paid hosting. It checks actual DOM behavior, all nine mobile views, keyboard activation, bilingual navigation, reset, negative cases and external network isolation. Its results must be observed at the new head; visual review of screenshots remains separate.
+- Local GitHub download was blocked by DNS in the preparation environment; browser evidence will be collected from the public repository's standard free CI, not from Vercel deploys.

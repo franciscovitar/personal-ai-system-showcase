@@ -34,7 +34,7 @@ function toggle(id,title,checked,change){const c=el("input");c.type="checkbox";c
 function head(id,title,desc){const h=el("h1",null,title);h.id="view-title";h.tabIndex=-1;return el("div",null,el("p","eyebrow",String(views.indexOf(id)+1).padStart(2,"0")+" / "+l(names,id)),h,el("p","lead",desc));}
 const panel=(title,...c)=>el("section","panel",title?el("h2",null,title):null,c);
 const note=x=>el("p","muted",x);
-const status=(code,warn=false)=>el("div","status"+(warn?" warn":""),el("strong",null,l(states,code)),el("span","code",code));
+const status=(code,warn=false)=>{const n=el("div","status"+(warn?" warn":""),el("strong",null,l(states,code)),el("span","code",code));n.setAttribute("role","status");return n;};
 const chip=x=>el("span","chip",x);
 const chips=xs=>el("div","chips",xs.map(chip));
 const item=(title,body,extra=null)=>el("div","item",el("strong",null,title),body?el("p",null,body):null,extra);
@@ -93,7 +93,7 @@ function render(focusId){
  $("skip").textContent=t("Saltar al contenido","Skip to content");
  $("subtitle").textContent=t("Personal AI System / Referencia pública","Personal AI System / Public reference");
  $("case-link").href="https://franvitar.genovasite.com/work/personal-ai-system"+(lang==="es"?"?lang=es":"");
- $("language").textContent=lang==="es"?"EN":"ES";$("language").setAttribute("aria-label",t("Cambiar a inglés","Switch to Spanish"));
+ $("language").textContent=lang==="es"?"EN":"ES";$("language").setAttribute("aria-label",t("Cambiar a inglés (reinicia el ejercicio de estudio)","Switch to Spanish (resets the study exercise)"));
  $("nav-label").textContent=t("Explorar el sistema","Explore the system");$("navigation").setAttribute("aria-label",t("Módulos","Modules"));
  $("local-note").textContent=t("Entorno sintético. Sin cuentas, conectores ni llamadas a modelos.","Synthetic environment. No accounts, connectors or model calls.");
  $("reset").textContent=t("Reiniciar recorrido","Reset journey");$("footer").textContent=t("Referencia pública · No representa una sesión real del PAS privado.","Public reference · Not a live session of the private PAS.");

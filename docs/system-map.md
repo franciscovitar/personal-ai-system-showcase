@@ -104,3 +104,18 @@ En el código público, la ruta llega a **candidatos remotos con `fetched: false
 ## 7. Qué no demostramos
 
 La calidad de recomendaciones reales, la cobertura de todas las materias, la exactitud de un modelo LLM, sincronizaciones de salud, despliegues, conectores autenticados, durabilidad entre reinicios, servicios de cliente y producción. Para esos límites, ver [Seguridad](security-and-scope.md) y [Evidencia de tests](verification.md).
+
+
+## Public reference extension — PAS Explorer V2
+
+| Responsibility | Executable public module | Boundary |
+| --- | --- | --- |
+| Intent and scoped browser trace | `src/reference/browser-trace.mjs` | Synthetic registry and claims; no LLM or remote reads |
+| Research coverage and counterevidence | `src/reference/research-review.mjs` | Fixture provenance, no live fact checking or winner |
+| Tool evaluation | `src/reference/tool-comparison.mjs` | Matched fixture metrics, eligibility and Pareto comparison; not vendor pricing |
+| Work blocks | `src/reference/execution-block.mjs` | Dependency, local/global blockers, revision and reconciliation; no real agents |
+| Delivery selection | `src/reference/delivery-selection.mjs` | 45 compatible routes; candidate selection, not private dossier retrieval |
+| Commercial workflow | `src/reference/commercial-case.mjs` | Fictional lifecycle, consent and suppression; not real CRM or contact |
+| Browser interface | `explorer/` | Nine views, in-memory fixtures, no external execution or shared persistence |
+
+The public reference is not equivalent to field validation of Genova V1, adoption of commercial candidate methods, or a live V2 host. See [architecture and acceptance](PAS_EXPLORER_V2_ARCHITECTURE.md) and [current checkpoint](PAS_EXPLORER_V2_CHECKPOINT.md).
