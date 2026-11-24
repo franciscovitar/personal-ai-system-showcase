@@ -62,10 +62,10 @@ try {
   const s=await send("Page.captureScreenshot",{format:"png",fromSurface:true});writeFileSync(join(output,name+".png"),Buffer.from(s.data,"base64"));
  };
  const width=async w=>send("Emulation.setDeviceMetricsOverride",{width:w,height:w===390?844:900,deviceScaleFactor:1,mobile:false});
- const noOverflow=async()=>{const v=await evaluate("({width:innerWidth,scroll:document.documentElement.scrollWidth})");assert.ok(v.scroll<=v.width+2,JSON.stringify(v));};
+ const noOverflow=async(label)=>{const v=await evaluate("({width:innerWidth,scroll:document.documentElement.scrollWidth,offenders:[...document.querySelectorAll('body *')].map(e=>({tag:e.tagName,cls:String(e.className?.baseVal??e.className??''),right:Math.round(e.getBoundingClientRect().right),left:Math.round(e.getBoundingClientRect().left),width:Math.round(e.getBoundingClientRect().width)})).filter(e=>e.width>0&&(e.right>innerWidth+2||e.left< -2)).sort((a,b)=>b.right-a.right).slice(0,12)})");if(v.scroll>v.width+2){await screenshot("overflow-"+label);throw Error("Horizontal overflow "+label+" "+JSON.stringify(v));}};
  const explorer="/pas-explorer/explorer/index.html";
  const caseRoute="/work/personal-ai-system";
- await send("Runtime.enable");await send("Page.enable");
+ await send("Runtime.enable");await send("Page.enable");await send("Emulation.setEmulatedMedia",{features:[{name:"prefers-reduced-motion",value:"reduce"}]});
  for(const w of [1440,390]){
   await width(w);
   for(const lang of ["es","en"]){
@@ -73,27 +73,27 @@ try {
    const href=await evaluate("Array.from(document.querySelectorAll('a[href]')).find(a=>a.getAttribute('href')==="+JSON.stringify(explorer+"?lang="+lang)+")?.getAttribute('href')");
    assert.equal(href,explorer+"?lang="+lang,"homepage Explorer link");
    assert.equal(await evaluate("document.documentElement.lang"),lang);
-   await evaluate("Array.from(document.querySelectorAll('a[href]')).find(a=>a.getAttribute('href')==="+JSON.stringify(href)+").closest('article')?.scrollIntoView({block:'start'})");
-   await noOverflow();await screenshot("home-pas-"+lang+"-"+w);
+   await evaluate("Array.from(document.querySelectorAll('a[href]')).find(a=>a.getAttribute('href')==="+JSON.stringify(href)+").closest('article')?.scrollIntoView({block:'start',behavior:'instant'})");
+   const copyWidth=await evaluate("Array.from(document.querySelectorAll('a[href]')).find(a=>a.getAttribute('href')==="+JSON.stringify(href)+").closest('article').querySelector('h3').getBoundingClientRect().width");assert.ok(copyWidth>=Math.min(280,w-32),"flagship text column "+copyWidth);await noOverflow("home-"+lang+"-"+w);await screenshot("home-pas-"+lang+"-"+w);
    await navigate(caseRoute+"?lang="+lang);
    assert.equal(await evaluate("document.documentElement.lang"),lang);
    await wait("document.querySelector('#pas-ecosystem')!==null","ecosystem rendered");
    assert.ok(await evaluate("Array.from(document.querySelectorAll('a[href]')).some(a=>a.getAttribute('href')==="+JSON.stringify(href)+")"),"case Explorer link");
    assert.equal(await evaluate("document.querySelectorAll('#pas-ecosystem details').length"),7);
-   await noOverflow();await screenshot("case-hero-"+lang+"-"+w);
-   await evaluate("document.querySelector('#pas-ecosystem').scrollIntoView({block:'start'})");
+   await noOverflow("case-"+lang+"-"+w);await screenshot("case-hero-"+lang+"-"+w);
+   await evaluate("document.querySelector('#pas-ecosystem').scrollIntoView({block:'start',behavior:'instant'})");
    await screenshot("ecosystem-"+lang+"-"+w);
    await evaluate("document.querySelector('#pas-ecosystem details summary').click()");
    assert.equal(await evaluate("document.querySelector('#pas-ecosystem details').open"),true);
    await navigate(href);
    await wait("document.querySelectorAll('#navigation button').length===9","Explorer boot");
    assert.equal(await evaluate("document.documentElement.lang"),lang);
-   await noOverflow();await screenshot("explorer-"+lang+"-"+w);
+   await noOverflow("explorer-"+lang+"-"+w);await screenshot("explorer-"+lang+"-"+w);
    await evaluate("document.querySelectorAll('#navigation button')[1].click()");
    await wait("document.body.innerText.includes('REFERENCE_PLAN_READY')","working integrated Explorer");
    await evaluate("document.getElementById('missing').click()");
    await wait("document.body.innerText.includes('SOURCE_BLOCKED')","integrated negative case");
-   await noOverflow();
+   await noOverflow("explorer-negative-"+lang+"-"+w);
    console.log("PORTFOLIO_BROWSER_PASS",w,lang);
   }
  }

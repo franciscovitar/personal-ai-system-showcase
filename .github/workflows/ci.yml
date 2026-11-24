@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: franciscovitar/franciscovitar
-          ref: ca56523e4a8f04d0d445eeb739b8ecead0d23bf9
+          ref: 706cde642d4d197a3fab91104e94176ee803f5db
           persist-credentials: false
           path: portfolio
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
@@ -28,7 +28,7 @@ jobs:
         env:
           NEXT_TELEMETRY_DISABLED: '1'
         run: |
-          test "$(git rev-parse HEAD)" = "ca56523e4a8f04d0d445eeb739b8ecead0d23bf9"
+          test "$(git rev-parse HEAD)" = "706cde642d4d197a3fab91104e94176ee803f5db"
           if [ -d .next ]; then mv .next "$RUNNER_TEMP/portfolio-prior-build"; fi
           npm ci --no-audit --no-fund
           npm run build
