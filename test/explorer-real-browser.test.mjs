@@ -85,7 +85,8 @@ test("Explorer: actual Chromium journeys, mobile/desktop, language, permissions 
     await noOverflow();
     // Keyboard activation (not merely programmatic click).
     await evaluate("document.querySelectorAll('#navigation button')[1].focus()");
-    await send("Input.dispatchKeyEvent",{type:"keyDown",key:"Enter",code:"Enter",windowsVirtualKeyCode:13});
+    assert.equal(await evaluate("document.activeElement===document.querySelectorAll('#navigation button')[1]"),true,"navigation keyboard focus");
+    await send("Input.dispatchKeyEvent",{type:"keyDown",key:"Enter",code:"Enter",windowsVirtualKeyCode:13,text:"\r",unmodifiedText:"\r"});
     await send("Input.dispatchKeyEvent",{type:"keyUp",key:"Enter",code:"Enter",windowsVirtualKeyCode:13});
     await contains("REFERENCE_PLAN_READY");
     await toggle("missing");await contains("SOURCE_BLOCKED");
