@@ -10,6 +10,10 @@
 
 **La complejidad también es parte de la historia.** La primera referencia mostraba seis rutas simples; esta versión agrega una segunda capa técnica, auditable, que conserva la amplitud conceptual: **14 Skills**, routing de conocimiento y aislamiento, políticas de permisos, evidencia por claim, aprendizaje y captura, continuidad con CAS, mejora gobernada y el catálogo profesional de **12 servicios × 7 intervenciones × 35 familias de diseño**. Esas cifras describen **contratos y catálogo**, no 14 agentes instalados ni 35 librerías desplegadas.
 
+## Evolución V2 (en desarrollo)
+
+[PAS Explorer — arquitectura, diseño y aceptación](docs/PAS_EXPLORER_V2_ARCHITECTURE.md) · [Checkpoint de implementación](docs/PAS_EXPLORER_V2_CHECKPOINT.md). La interfaz web pública aún no está implementada. El objetivo es ejecutar la lógica de referencia desde un navegador sin conexiones privadas.
+
 ## El problema
 
 Cuando un asistente de IA participa en tareas de estudio, investigación, desarrollo de software o gestión personal, la conversación por sí sola no alcanza:

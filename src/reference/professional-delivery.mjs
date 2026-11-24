@@ -1,3 +1,5 @@
+import { compatibleRoute, selectFamilies } from "./delivery-selection.mjs";
+
 /**
  * Public method catalog. 12 service families, 7 intervention overlays and 35
  * designed library families are distinct dimensions, not 35 installed tools.
@@ -35,11 +37,13 @@ export function classifyService(text) {
   return { status: "NEEDS_DISCOVERY", reason: "A service and intervention cannot be responsibly assumed." };
 }
 
-export function designDeliveryPlan({ service, intervention, sourceReceipt, researchEvidence = [], explicitWriteAuthorization = false } = {}) {
-  if (!SERVICES.includes(service) || !INTERVENTIONS.includes(intervention)) return { status: "UNSUPPORTED_COMBINATION", execute: false };
+export function designDeliveryPlan({ service, intervention, sourceReceipt, researchEvidence = [], requestedFamilies = [], explicitWriteAuthorization = false } = {}) {
+  if (!compatibleRoute(service, intervention)) return { status: "UNSUPPORTED_COMBINATION", execute: false };
   if (!sourceReceipt || sourceReceipt.status !== "VERIFIED_ACTIVE" || !sourceReceipt.commit || !sourceReceipt.blobsVerified) {
     return { status: "NOT_LOADED", execute: false, reason: "Current primary methodology has not been verified." };
   }
+  const selection = selectFamilies({ service, intervention, requested: requestedFamilies });
+  if (selection.status !== "CATALOG_CANDIDATES_ONLY") return { status: selection.status, execute: false };
   const researchStatus = researchEvidence.length ? "RESEARCH_PROPOSED_FOR_REVIEW" : "RESEARCH_REQUIRED";
   return {
     status: "DESIGN_PLAN_ONLY",
@@ -47,7 +51,9 @@ export function designDeliveryPlan({ service, intervention, sourceReceipt, resea
     intervention,
     sourceCommit: sourceReceipt.commit,
     researchStatus,
-    libraryCandidates: ["L31", "L33", "L35", "L34", "L25", "L26"],
+    libraryCandidates: selection.families.map(f => f.id),
+    librarySelection: selection.families,
+    readOnly: selection.readOnly,
     gates: ["Scope and current sources", "Discovery", "Research-first comparison", "Explicit approval", "Implementation", "Observed QA", "Release authorization and readback"],
     execute: false,
     executionAuthority: "NONE",

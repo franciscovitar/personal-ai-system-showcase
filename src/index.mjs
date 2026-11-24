@@ -13,3 +13,6 @@ export { prepareCapture } from "./reference/capture-runtime.mjs";
 export { reviewImprovement } from "./reference/improvement-runtime.mjs";
 export { SERVICES, INTERVENTIONS, LIBRARY_FAMILIES, classifyService, designDeliveryPlan } from "./reference/professional-delivery.mjs";
 export { orchestrateReferenceRequest } from "./reference/orchestrator.mjs";
+
+export { ROUTES, compatibleRoute, selectFamilies } from "./reference/delivery-selection.mjs";
+export { planBlock, applyCheckpoint } from "./reference/execution-block.mjs";
