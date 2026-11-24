@@ -9,6 +9,6 @@ function modules(folder) {
   });
 }
 
-const files = ["src", "test", "examples", "scripts"].flatMap(modules);
+const files = ["src", "test", "examples", "scripts", "explorer"].flatMap(modules);
 for (const path of files) execFileSync(process.execPath, ["--check", path], { stdio: "pipe" });
 console.log(`Syntax checked: ${files.length} JavaScript modules`);

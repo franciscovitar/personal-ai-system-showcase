@@ -1,8 +1,11 @@
 # V2 development checkpoint — 2026-11-24
+
 Scope: personal engineering portfolio; synthetic public reference only.
-- Base: public Showcase main 605f3d663953ff0a9845775452be8b74e28cfad2.
 - Design: [PAS Explorer V2](PAS_EXPLORER_V2_ARCHITECTURE.md).
-- First slice: 45-route compatibility, contextual family candidate selection, pure block planning and revision-checked synthetic checkpoints, exported public API and Node test declarations.
-- Evidence: 19 direct V8 behavioral assertions over the authored functions passed during preparation. This is not a native Node test run or full repository regression. No browser QA or deployment performed.
-- Next: verify native Node suite on this branch, then implement research/evidence and bounded tool selection; build Explorer on these actual modules. No need to repeat the architecture decision.
-- No external integrations, real data, private code export, account changes or paid infrastructure authorized here.
+- First slice: 45-route compatibility, contextual family candidate selection, dependency planning and revision-checked checkpoints. Native GitHub Actions on branch checkpoint `1b677a2`: [run 45477622796](https://github.com/franciscovitar/personal-ai-system-showcase/actions/runs/45477622796), syntax and Node tests succeeded. This evidence applies to that commit only.
+- Second slice: research coverage and counterevidence; capability/budget/authority-aware tool comparison; synthetic commercial lifecycle (consent, suppression, terms, buyer decision and direct contribution); browser-safe routing composition; checkpoint reconciliation.
+- First Explorer interface: 9 bilingual views importing the actual reference modules, fixed fictional scenarios and computed states/traces, no external network requests, backend/API/model calls or persistence. See [local browser reference](../explorer/README.md). Static output command is `npm run build:explorer`; allowlist excludes the Node-only store and unrelated files.
+- Preparation verification: 24 direct behavioral assertions over new runtime functions and exact reference modules; 56 further assertions on the saved browser graph at `3c76410` (imports, syntax, fixtures, fail-closed routing, research, tools, task reconciliation and full commercial journey). Study fixture schemas were checked; native study runtime deferred because the V8 preparation host lacks structuredClone. These overlapping checks are not a count of Node tests or browser runs.
+- Added Node test declarations covering second-slice runtime, fixtures, study and static packaging. Native execution of the final checkpoint and actual browser/visual QA remain pending until observed.
+- Next: verify the branch CI for final head and run browser QA (both languages, mobile/desktop, keyboard, normal and negative paths), fix issues, then synchronize the broader public docs and portfolio case. Only then consider authorized static publication with verified zero incremental cost. Do not repeat the architecture decision or first slice.
+- No real external integrations, account changes, client/customer records, private PAS code export or paid infrastructure authorized or performed.

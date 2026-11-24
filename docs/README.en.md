@@ -8,6 +8,10 @@
 
 **Engineering depth matters.** Beyond the original six sample routes, this repository now demonstrates contracts for **14 specialized Skills**, scoped knowledge and source governance, policy/permission gates, claim-level evidence, learning and capture runtimes, optimistic concurrency for project continuity, controlled improvement, and a professional delivery taxonomy of **12 services, 7 intervention types and 35 designed library families**. These are distinct architectural dimensions—not a claim that 14 autonomous agents or 35 production libraries are deployed.
 
+## PAS Explorer V2 (development)
+
+The public reference is expanding into a bilingual static browser interface backed by its executable modules. See the [architecture](PAS_EXPLORER_V2_ARCHITECTURE.md), [local instructions](../explorer/README.md) and [checkpoint](PAS_EXPLORER_V2_CHECKPOINT.md). The interface is not deployed and does not access the private PAS. Research coverage, tool comparison, commercial lifecycle and execution checkpoints use synthetic fixtures only.
+
 ## The challenge
 
 AI assistants can help with research, learning, software engineering and personal operations. But a single conversation is not a durable source of truth. A generated response is not evidence that an operation happened, and the ability to read a tool does not imply permission to write to it.

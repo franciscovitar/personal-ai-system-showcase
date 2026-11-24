@@ -12,7 +12,7 @@
 
 ## Evolución V2 (en desarrollo)
 
-[PAS Explorer — arquitectura, diseño y aceptación](docs/PAS_EXPLORER_V2_ARCHITECTURE.md) · [Checkpoint de implementación](docs/PAS_EXPLORER_V2_CHECKPOINT.md). La interfaz web pública aún no está implementada. El objetivo es ejecutar la lógica de referencia desde un navegador sin conexiones privadas.
+[PAS Explorer — arquitectura, diseño y aceptación](docs/PAS_EXPLORER_V2_ARCHITECTURE.md) · [Checkpoint de implementación](docs/PAS_EXPLORER_V2_CHECKPOINT.md). La primera interfaz de desarrollo está en [explorer/](explorer/README.md): nueve vistas bilingües que ejecutan módulos públicos con datos ficticios, sin conexiones privadas. Todavía no está desplegada ni pasó QA visual de navegador.
 
 ## El problema
 
