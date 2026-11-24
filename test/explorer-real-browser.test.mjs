@@ -15,7 +15,7 @@ test("Explorer: actual Chromium journeys, mobile/desktop, language, permissions 
   assert.ok(chrome, "CI requires a Chromium executable");
   const temp=mkdtempSync(join(tmpdir(),"pas-browser-"));
   const root=join(temp,"dist"), profile=join(temp,"profile");
-  let child, socket, server;
+  let child, socket, server, closeBrowser, failed;
   const errors=[], external=[], pending=new Map();
   let id=0;
   try {
@@ -30,7 +30,7 @@ test("Explorer: actual Chromium journeys, mobile/desktop, language, permissions 
     });
     await new Promise((resolve,reject)=>{server.once("error",reject);server.listen(0,"127.0.0.1",resolve);});
     const origin="http://127.0.0.1:"+server.address().port;
-    child=spawn(chrome,["--headless=new","--no-sandbox","--disable-dev-shm-usage","--disable-background-networking","--no-first-run","--remote-debugging-port=0","--user-data-dir="+profile,"about:blank"],{stdio:"ignore"});
+    child=spawn(chrome,["--headless=new","--no-sandbox","--disable-dev-shm-usage","--disable-background-networking","--no-first-run","--remote-debugging-port=0","--user-data-dir="+profile,"about:blank"],{stdio:"ignore",detached:true});
     let spawnError;child.on("error",err=>spawnError=err);
     let port;
     for(let i=0;i<100;i++){
@@ -57,17 +57,21 @@ test("Explorer: actual Chromium journeys, mobile/desktop, language, permissions 
       const timer=setTimeout(()=>{pending.delete(key);reject(Error("CDP timeout: "+method));},10000);
       pending.set(key,{resolve,reject,timer});socket.send(JSON.stringify({id:key,method,params}));
     });
+    closeBrowser=()=>send("Browser.close");
     const evaluate=async expression=>{
       const r=await send("Runtime.evaluate",{expression,returnByValue:true,awaitPromise:true});
       if(r.exceptionDetails)throw Error(r.exceptionDetails.exception?.description??r.exceptionDetails.text);
       return r.result.value;
     };
     const wait=async (expression,description)=>{
-      for(let i=0;i<100;i++){if(await evaluate(expression))return;await delay(75);}
+      for(let i=0;i<100;i++){
+        try{if(await evaluate(expression))return;}catch(err){if(!/context|navigat|destroyed|not find/i.test(String(err)))throw err;}
+        await delay(75);
+      }
       throw Error("Browser condition failed: "+description);
     };
-    const contains=text=>wait("document.body.innerText.includes("+JSON.stringify(text)+")",text);
-    const nav=async index=>{await evaluate("document.querySelectorAll('#navigation button')["+index+"].click()");await wait("document.querySelectorAll('#navigation button')["+index+"].getAttribute('aria-current')==='page'","navigation "+index);};
+    const contains=async text=>{await wait("document.body.innerText.includes("+JSON.stringify(text)+")",text);console.log("EXPLORER_CHECK "+text);};
+    const nav=async index=>{console.log("EXPLORER_VIEW "+index);await evaluate("document.querySelectorAll('#navigation button')["+index+"].click()");await wait("document.querySelectorAll('#navigation button')["+index+"].getAttribute('aria-current')==='page'","navigation "+index);};
     const field=async (id,value)=>{await evaluate("(()=>{const n=document.getElementById("+JSON.stringify(id)+");n.value="+JSON.stringify(String(value))+";n.dispatchEvent(new Event('change',{bubbles:true}));})()");};
     const toggle=async id=>evaluate("document.getElementById("+JSON.stringify(id)+").click()");
     const clickText=async text=>{const found=await evaluate("(()=>{const b=[...document.querySelectorAll('#screen button')].find(n=>!n.disabled&&n.textContent.trim()==="+JSON.stringify(text)+");if(!b)return false;b.click();return true;})()");assert.equal(found,true,"button "+text);};
@@ -122,11 +126,23 @@ test("Explorer: actual Chromium journeys, mobile/desktop, language, permissions 
     assert.deepEqual(errors,[],"browser runtime errors");
     assert.deepEqual(external,[],"external HTTP requests");
     console.log("EXPLORER_BROWSER_PASS: 9 views; desktop and 390px; ES/EN; keyboard; routing, evidence, delivery, blockers, tool selection, consent, learning, policy, reset; no external requests");
+  } catch(err) {
+    failed=err;
+    console.error("EXPLORER_JOURNEY_FAILURE",err.stack??String(err));
+    throw err;
   } finally {
+    if(closeBrowser){try{await Promise.race([closeBrowser(),delay(1500)]);}catch{}}
     if(socket){try{socket.close();}catch{}}
     for(const p of pending.values())clearTimeout(p.timer);
-    if(child&&child.exitCode===null){child.kill("SIGTERM");await Promise.race([new Promise(resolve=>child.once("exit",resolve)),delay(2500)]);if(child.exitCode===null)child.kill("SIGKILL");}
-    if(server)await new Promise(resolve=>server.close(resolve));
-    rmSync(temp,{recursive:true,force:true,maxRetries:3,retryDelay:100});
+    if(child&&child.exitCode===null&&child.signalCode===null){
+      await Promise.race([new Promise(resolve=>child.once("exit",resolve)),delay(3000)]);
+    }
+    // Stop only the dedicated detached browser process group, including helpers.
+    if(child?.pid){try{process.kill(-child.pid,"SIGTERM");}catch(err){if(err.code!=="ESRCH")console.warn("Browser group termination:",err.code);}}
+    await delay(500);
+    if(child?.pid){try{process.kill(-child.pid,"SIGKILL");}catch(err){if(err.code!=="ESRCH")console.warn("Browser group termination:",err.code);}}
+    if(server){server.closeAllConnections();await new Promise(resolve=>server.close(resolve));}
+    try{rmSync(temp,{recursive:true,force:true,maxRetries:8,retryDelay:250});}
+    catch(err){console.error("EXPLORER_CLEANUP_FAILURE",err.code);if(!failed)throw err;}
   }
 });
