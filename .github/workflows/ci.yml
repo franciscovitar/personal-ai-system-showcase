@@ -1,16 +1,44 @@
-name: Reference architecture CI
-
+name: One-off portfolio release candidate QA
 on:
   push:
-  pull_request:
-
+    branches:
+      - qa/portfolio-pas-explorer-final-20261124
+permissions:
+  contents: read
 jobs:
-  test:
+  portfolio:
     runs-on: ubuntu-latest
+    timeout-minutes: 9
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          node-version: 22
-      - run: npm run check
-      - run: npm test
+          persist-credentials: false
+          path: reference
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: franciscovitar/franciscovitar
+          ref: ca56523e4a8f04d0d445eeb739b8ecead0d23bf9
+          persist-credentials: false
+          path: portfolio
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+      - name: Clean production build in disposable checkout
+        working-directory: portfolio
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
+        run: |
+          test "$(git rev-parse HEAD)" = "ca56523e4a8f04d0d445eeb739b8ecead0d23bf9"
+          if [ -d .next ]; then mv .next "$RUNNER_TEMP/portfolio-prior-build"; fi
+          npm ci --no-audit --no-fund
+          npm run build
+      - name: Browser and HTTP integration acceptance
+        run: node reference/scripts/portfolio-release-qa.mjs portfolio
+      - name: Preserve visual evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: portfolio-pas-browser-evidence
+          path: portfolio-qa-evidence/
+          if-no-files-found: ignore
+          retention-days: 3
