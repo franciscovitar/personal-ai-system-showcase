@@ -6,6 +6,8 @@ import {join,resolve} from "node:path";
 import {setTimeout as delay} from "node:timers/promises";
 const cwd=resolve(process.argv[2]);
 const origin="http://127.0.0.1:3080";
+const baselineOrigin="http://127.0.0.1:3081";
+const baselineCwd=resolve(process.argv[3]);
 const temp=mkdtempSync(join(tmpdir(),"portfolio-qa-"));
 const output=resolve("portfolio-qa-evidence");
 mkdirSync(output,{recursive:true});
@@ -24,6 +26,10 @@ try {
  let ready=false;
  for(let i=0;i<80;i++){try{ready=(await fetch(origin+"/?lang=es")).ok;}catch{}if(ready)break;assert.equal(server.exitCode,null);await delay(250);}
  assert.ok(ready,"Next server unavailable");
+ const baselineServer=start("node",["node_modules/next/dist/bin/next","start","--hostname","127.0.0.1","--port","3081"],{cwd:baselineCwd,env:{...process.env,NEXT_TELEMETRY_DISABLED:"1"}});
+ let baselineReady=false;
+ for(let i=0;i<80;i++){try{baselineReady=(await fetch(baselineOrigin+"/?lang=es")).ok;}catch{}if(baselineReady)break;assert.equal(baselineServer.exitCode,null);await delay(250);}
+ assert.ok(baselineReady,"Unchanged baseline server unavailable");
  const manifest=JSON.parse(readFileSync(join(cwd,"docs/pas-explorer-snapshot.json"),"utf8"));
  for(const f of manifest.files){
    const response=await fetch(origin+"/"+f.path.replace(/^public\//,""));
@@ -53,9 +59,10 @@ try {
  });
  const evaluate=async expression=>{const r=await send("Runtime.evaluate",{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(r.exceptionDetails.exception?.description??r.exceptionDetails.text);return r.result.value;};
  const wait=async(expression,label)=>{for(let i=0;i<100;i++){try{if(await evaluate(expression))return;}catch(e){if(!/context|navigat|destroyed|not find/i.test(String(e)))throw e;}await delay(100);}throw Error("Condition failed: "+label);};
- const navigate=async path=>{
-  await send("Page.navigate",{url:origin+path});
-  await wait("location.href==="+JSON.stringify(origin+path)+"&&document.readyState==='complete'",path);
+ const navigate=async (path,host=origin)=>{
+  await send("Page.navigate",{url:host+path});
+  await wait("location.href==="+JSON.stringify(host+path)+"&&document.readyState==='complete'",path);
+  await evaluate("document.fonts.ready.then(()=>true)");
  };
  const screenshot=async name=>{
   await evaluate("document.fonts.ready.then(()=>true)");await delay(250);
@@ -63,18 +70,29 @@ try {
  };
  const width=async w=>send("Emulation.setDeviceMetricsOverride",{width:w,height:w===390?844:900,deviceScaleFactor:1,mobile:false});
  const noOverflow=async(label)=>{const v=await evaluate("({width:innerWidth,scroll:document.documentElement.scrollWidth,offenders:[...document.querySelectorAll('body *')].map(e=>({tag:e.tagName,cls:String(e.className?.baseVal??e.className??''),right:Math.round(e.getBoundingClientRect().right),left:Math.round(e.getBoundingClientRect().left),width:Math.round(e.getBoundingClientRect().width)})).filter(e=>e.width>0&&(e.right>innerWidth+2||e.left< -2)).sort((a,b)=>b.right-a.right).slice(0,12)})");if(v.scroll>v.width+2){await screenshot("overflow-"+label);throw Error("Horizontal overflow "+label+" "+JSON.stringify(v));}};
+ const homeMetrics=async()=>evaluate("(()=>{const w=document.documentElement.clientWidth;const offenders=[...document.querySelectorAll('body *')].map(e=>{const r=e.getBoundingClientRect();let right=r.right,left=r.left;for(let p=e.parentElement;p&&p!==document.body;p=p.parentElement){if(['auto','scroll','hidden','clip'].includes(getComputedStyle(p).overflowX)){const a=p.getBoundingClientRect();right=Math.min(right,a.right);left=Math.max(left,a.left);}}return {tag:e.tagName,cls:String(e.className?.baseVal??e.className??''),right:Math.round(right),left:Math.round(left),width:Math.round(r.width)};}).filter(e=>e.width>0&&(e.right>w+2||e.left< -2)).sort((a,b)=>b.right-a.right).slice(0,20);return {viewport:innerWidth,client:w,scroll:document.documentElement.scrollWidth,offenders};})()");
  const explorer="/pas-explorer/explorer/index.html";
  const caseRoute="/work/personal-ai-system";
  await send("Runtime.enable");await send("Page.enable");await send("Emulation.setEmulatedMedia",{features:[{name:"prefers-reduced-motion",value:"reduce"}]});
  for(const w of [1440,390]){
   await width(w);
   for(const lang of ["es","en"]){
+   let baselineHome=null;
+   if(w===390){await navigate("/?lang="+lang,baselineOrigin);baselineHome=await homeMetrics();console.log("PORTFOLIO_BASELINE_HOME",lang,JSON.stringify(baselineHome));}
    await navigate("/?lang="+lang);
    const href=await evaluate("Array.from(document.querySelectorAll('a[href]')).find(a=>a.getAttribute('href')==="+JSON.stringify(explorer+"?lang="+lang)+")?.getAttribute('href')");
    assert.equal(href,explorer+"?lang="+lang,"homepage Explorer link");
    assert.equal(await evaluate("document.documentElement.lang"),lang);
    await evaluate("Array.from(document.querySelectorAll('a[href]')).find(a=>a.getAttribute('href')==="+JSON.stringify(href)+").closest('article')?.scrollIntoView({block:'start',behavior:'instant'})");
-   const copyWidth=await evaluate("Array.from(document.querySelectorAll('a[href]')).find(a=>a.getAttribute('href')==="+JSON.stringify(href)+").closest('article').querySelector('h3').getBoundingClientRect().width");assert.ok(copyWidth>=Math.min(280,w-32),"flagship text column "+copyWidth);await noOverflow("home-"+lang+"-"+w);await screenshot("home-pas-"+lang+"-"+w);
+   const copyWidth=await evaluate("Array.from(document.querySelectorAll('a[href]')).find(a=>a.getAttribute('href')==="+JSON.stringify(href)+").closest('article').querySelector('h3').getBoundingClientRect().width");assert.ok(copyWidth>=Math.min(280,w-32),"flagship text column "+copyWidth);if(w===390){
+    const actual=await homeMetrics();
+    const bounds=await evaluate("(()=>{const a=[...document.querySelectorAll('article')].find(e=>e.querySelector('a[href^=\"/pas-explorer/\"]'));const r=a.getBoundingClientRect();const w=document.documentElement.clientWidth;return {left:r.left,right:r.right,client:w,overflow:[...a.querySelectorAll('*')].map(e=>({cls:String(e.className?.baseVal??e.className??''),r:e.getBoundingClientRect().right,l:e.getBoundingClientRect().left})).filter(e=>e.r>w+2||e.l< -2).slice(0,10)};})()");
+    console.log("PORTFOLIO_CANDIDATE_HOME",lang,JSON.stringify(actual),"PAS_BOUNDS",JSON.stringify(bounds));
+    assert.ok(bounds.left>=-2&&bounds.right<=bounds.client+2&&bounds.overflow.length===0,"new PAS block exceeds viewport "+JSON.stringify(bounds));
+    assert.ok(actual.scroll<=Math.max(actual.viewport,baselineHome.scroll)+2,"new homepage horizontal regression "+JSON.stringify(actual));
+    if(actual.scroll>actual.viewport+2)console.log("PORTFOLIO_EXISTING_HOME_OVERFLOW",lang,baselineHome.scroll,actual.scroll);
+   }else await noOverflow("home-"+lang+"-"+w);
+   await screenshot("home-pas-"+lang+"-"+w);
    await navigate(caseRoute+"?lang="+lang);
    assert.equal(await evaluate("document.documentElement.lang"),lang);
    await wait("document.querySelector('#pas-ecosystem')!==null","ecosystem rendered");

@@ -20,6 +20,12 @@ jobs:
           ref: 706cde642d4d197a3fab91104e94176ee803f5db
           persist-credentials: false
           path: portfolio
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: franciscovitar/franciscovitar
+          ref: e10a920fe13d260f76393510ea15b249f9c94fda
+          persist-credentials: false
+          path: portfolio-baseline
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 24
@@ -32,8 +38,18 @@ jobs:
           if [ -d .next ]; then mv .next "$RUNNER_TEMP/portfolio-prior-build"; fi
           npm ci --no-audit --no-fund
           npm run build
+      - name: Build unchanged baseline using same locked dependencies
+        working-directory: portfolio-baseline
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
+        run: |
+          test "$(git rev-parse HEAD)" = "e10a920fe13d260f76393510ea15b249f9c94fda"
+          cmp package-lock.json ../portfolio/package-lock.json
+          if [ -d .next ]; then mv .next "$RUNNER_TEMP/portfolio-baseline-prior-build"; fi
+          ln -s "$GITHUB_WORKSPACE/portfolio/node_modules" node_modules
+          npm run build
       - name: Browser and HTTP integration acceptance
-        run: node reference/scripts/portfolio-release-qa.mjs portfolio
+        run: node reference/scripts/portfolio-release-qa.mjs portfolio portfolio-baseline
       - name: Preserve visual evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
