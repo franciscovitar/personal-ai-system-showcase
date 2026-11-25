@@ -1,8 +1,8 @@
 # Recruiter / technical review tour
 
-## PAS Explorer V2 (development)
+## PAS Explorer V2 (public static reference)
 
-[Run the browser reference locally](../explorer/README.md). Start with the ecosystem, route a fictional goal, remove a required source, test conflicting research evidence, choose an incompatible Delivery route, block and reconcile a task, compare tool candidates, then suppress a fictional contact. The interface imports the real public modules; it does not run a private agent or send a message. `npm test` includes a Chromium journey when Chrome is available; `npm run build:explorer` creates the allowlisted static bundle.
+[Open the public Explorer](https://franvitar.genovasite.com/pas-explorer/explorer/index.html?lang=en) · [Run the browser reference locally](../explorer/README.md). Start with the ecosystem, route a fictional goal, remove a required source, test conflicting research evidence, choose an incompatible Delivery route, block and reconcile a task, compare tool candidates, then suppress a fictional contact. The interface imports the real public modules; it does not run a private agent or send a message. `npm test` includes a Chromium journey when Chrome is available; `npm run build:explorer` creates the allowlisted static bundle.
 
 ## En 3 minutos
 

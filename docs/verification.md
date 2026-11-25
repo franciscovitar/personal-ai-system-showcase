@@ -10,7 +10,7 @@ npm run example
 npm run tour
 ```
 
-No dependencies, API keys, internet, database or private inputs required. CI runs syntax and tests on GitHub Actions for pushes and PRs. The repository does not self-certify a remote workflow run: inspect the corresponding Actions result.
+The core reference requires no dependencies, API keys, internet, database or private inputs. Browser smoke tests also require an available Chromium installation; they use a loopback-only static server. CI runs syntax and tests on GitHub Actions for pushes and PRs. The repository does not self-certify a remote workflow run: inspect the corresponding Actions result.
 
 ## Failure-mode matrix
 
@@ -32,6 +32,7 @@ No dependencies, API keys, internet, database or private inputs required. CI run
 - **Unit/contract:** deterministic routing, policy, normalization, claim verification and study sessions.
 - **Integration in memory:** orchestrated planning, proposal/commit, optimistic concurrency, replay and readback.
 - **Negative scenarios:** missing evidence, cross-scope leakage, spoofed proposals, unknown permissions, higher-risk claims and stale revisions.
-- **Not in scope:** end-to-end browser integration, cloud connectors, authentication, secrets, wearable synchronization, live LLM evaluation, performance/load testing and private project data.
+- **Browser smoke and static integration:** [run 45485921797](https://github.com/franciscovitar/personal-ai-system-showcase/actions/runs/45485921797) recorded 49/49 passing tests, including the public Explorer Chromium journey; [portfolio integration run 45487710073](https://github.com/franciscovitar/personal-ai-system-showcase/actions/runs/45487710073) covers the static bundle in the portfolio. See the [versioned checkpoint](PAS_EXPLORER_V2_CHECKPOINT.md) for boundaries and evidence.
+- **Not in scope:** end-to-end private-system integration, cloud connectors, authentication, secrets, wearable synchronization, live LLM evaluation, performance/load testing and private project data.
 
 The test counts can evolve; the CI badge is a pointer to observed test runs, not a substitute for examining the actual workflow.
